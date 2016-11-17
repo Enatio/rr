@@ -1,0 +1,94 @@
+<html>
+<head>
+	<meta http-equiv=Content-Type content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/index.css">
+	<script type="text/javascript" src="./js/vue.js"></script>
+    <script type="text/javascript" src="./js/jquery.min.js"></script>
+	<script>
+        $(function(){
+           
+            var moviesVue = new Vue({
+                el: '#app',
+                data: {
+                    movies : ''
+                   
+                },
+                methods: {
+                    nameSearch: function () {
+                    var moviename = $('#moviename').val();
+                        var _self = this;
+                        $.ajax({
+                            type: 'GET',
+                            url: 'http://www.omdbapi.com/?t='+moviename+'&y=&plot=short&r=json',
+                            success:function(data) {
+                                _self.movies = eval(data);
+                            }
+                        });
+                    }
+                }
+            })
+
+
+         
+        })
+      
+    </script>
+</head>
+<body>
+
+<div id="app" >
+    <nav class="navbar navbar-default" role="navigation">
+     
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">IMDB</a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li><a href="#">请输入英文电影名称：</a></li>
+         
+        </ul>
+        <form class="navbar-form navbar-left" role="search" onsubmit="return false">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search" id="moviename" value="">
+          </div>
+          <button v-on:click="nameSearch()" class="btn btn-default">查询</button>
+        </form>
+        
+      </div>
+    </nav>
+       <table class="table table-bordered ">
+        <thead>
+        <tr>
+            <th style='width:3%; text-align: left'>电影名称</th>
+            <th style='width:5%; text-align: left'>上映时间</th>
+            <th style='width:10%; text-align: left'>片长</th>
+            <th style='width:10%; text-align: left'>类型</th>
+            <th style='width:10%; text-align: left'>海报</th>
+            <th style='width:10%; text-align: left'>简介</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{movies.Title}}</td>
+                <td>{{movies.Released}}</td>
+                <td>{{movies.Runtime}}</td>
+                <td>{{movies.Genre}}</td>
+                <td><img v-bind:src="movies.Poster" width="200px"></td>
+                <td>{{movies.Plot}}</td>
+            </tr>
+        </tbody>
+    </table>
+   
+</div>
+供测试的名称:
+《快乐大脚》“ <span onclick='document.getElementById("moviename").value=
+this.innerHTML'>Happy Feet</span>” 
+《冰河世纪》“<span onclick='document.getElementById("moviename").value=
+this.innerHTML'>Ice age</span>”
+《马达加斯加》“<span onclick='document.getElementById("moviename").value=
+this.innerHTML'>Madagascar</span>”
+</body>
+
+</html>
